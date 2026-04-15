@@ -14,6 +14,14 @@ interface AskDoubtProps {
     type?: string;
 }
 
+/**
+ * AskDoubt Component
+ * A modal form for students to submit doubts to the community or a specific classroom.
+ * Features:
+ * - Anonymous user identification via localStorage
+ * - Image attachment support with base64 conversion
+ * - Edit mode for existing doubts
+ */
 export default function AskDoubt({ defaultSubject = "", isOpen, onClose, onSuccess, doubtToEdit, classroomId = null, type = 'community' }: AskDoubtProps) {
     const [content, setContent] = useState(doubtToEdit?.content || "");
     const [subject, setSubject] = useState(doubtToEdit?.subject || defaultSubject);
@@ -33,6 +41,10 @@ export default function AskDoubt({ defaultSubject = "", isOpen, onClose, onSucce
         }
     }, [defaultSubject, doubtToEdit]);
 
+    /**
+     * Handles anonymous user generation and retrieval from localStorage.
+     * This creates a persistent "Academic Personality" for the student without requiring friction-heavy sign-ups.
+     */
     useEffect(() => {
         let savedName = localStorage.getItem("anonymous_user");
         if (!savedName) {
@@ -54,6 +66,10 @@ export default function AskDoubt({ defaultSubject = "", isOpen, onClose, onSucce
         }
     };
 
+    /**
+     * Submits the doubt to the API.
+     * Handles both creation (POST) and updates (PATCH).
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if ((!content.trim() && !imageUrl) || !subject.trim()) return;

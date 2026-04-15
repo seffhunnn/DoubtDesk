@@ -1,5 +1,9 @@
 import { integer, pgTable, varchar, text, timestamp, boolean, index } from "drizzle-orm/pg-core";
 
+/**
+ * Users table storing core user profiles.
+ * Includes moderation states (violationCount, blockedUntil) for safety enforcement.
+ */
 export const usersTable = pgTable("users", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
@@ -16,6 +20,9 @@ export const usersTable = pgTable("users", {
     createdAt: timestamp().defaultNow().notNull(),
 });
 
+/**
+ * Classrooms created by teachers to group students and doubts.
+ */
 export const classroomsTable = pgTable("classrooms", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
@@ -26,6 +33,9 @@ export const classroomsTable = pgTable("classrooms", {
     createdAt: timestamp().defaultNow().notNull(),
 });
 
+/**
+ * Junction table for Many-to-Many relationship between Users and Classrooms.
+ */
 export const membershipsTable = pgTable("memberships", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     userEmail: varchar({ length: 255 }).notNull(),
@@ -39,6 +49,10 @@ export const membershipsTable = pgTable("memberships", {
     };
 });
 
+/**
+ * Chat history for persistent AI Tutor sessions.
+ * Allows students to continue conversations with the AI.
+ */
 export const chatHistoryTable = pgTable("chat_history", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     chatId: varchar({ length: 255 }).notNull(), // Unique ID for each session
@@ -91,6 +105,11 @@ export const resumesTable = pgTable("resumes", {
     updatedAt: timestamp().defaultNow().notNull(),
 });
 
+/**
+ * Core Doubts table.
+ * Stores questions asked by students, their categorization, and resolution status.
+ * Can be public or linked to a specific classroom.
+ */
 export const doubtsTable = pgTable("doubts", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     userName: varchar({ length: 255 }).notNull(), // Randomly generated Student_XXX
@@ -120,6 +139,10 @@ export const likesTable = pgTable("likes", {
     createdAt: timestamp().defaultNow().notNull(),
 });
 
+/**
+ * Replies to doubts.
+ * Can be community comments or verified AI/Teacher solutions.
+ */
 export const repliesTable = pgTable("replies", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     doubtId: integer().notNull(),
@@ -132,6 +155,10 @@ export const repliesTable = pgTable("replies", {
     doubtIdIndex: index("doubtId_idx").on(table.doubtId),
 }));
 
+/**
+ * Audit log for AI moderation actions.
+ * Tracks flagged content snippets and reasons for future review by admins.
+ */
 export const moderationLogsTable = pgTable("moderation_logs", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     userEmail: varchar({ length: 255 }).notNull(),

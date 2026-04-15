@@ -11,9 +11,15 @@ const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
 });
 
+/**
+ * List of academic subjects for auto-detection and categorization.
+ */
 const SUBJECT_LIST = 'Algebra, Calculus, Geometry, Trigonometry, Statistics, Physics, Chemistry, Biology, Operating Systems, Networking, Data Structures, Algorithms, Programming, Computer Science, Economics, Accounting, English, Other';
 
-// PRIORITY MODELS (Vision & Text)
+/**
+ * Priority models for different types of queries.
+ * We use a fallback system to ensure reliability if a model is rate-limited or decommissioned.
+ */
 const VISION_MODELS = [
     "meta-llama/llama-4-scout-17b-16e-instruct",
     "pixtral-12b-2409",
@@ -26,6 +32,11 @@ const TEXT_MODELS = [
     "llama-3.1-70b-versatile"
 ];
 
+/**
+ * Executes a chat completion request with an automatic retry/fallback mechanism.
+ * @param messages Array of chat messages
+ * @param isVision Whether the request includes an image
+ */
 async function callGroqWithFallback(messages: any[], isVision: boolean) {
     const models = isVision ? VISION_MODELS : TEXT_MODELS;
     let lastError = null;
@@ -52,6 +63,15 @@ async function callGroqWithFallback(messages: any[], isVision: boolean) {
     throw lastError;
 }
 
+/**
+ * Main AI Solver API Route.
+ * Handles:
+ * 1. User Authentication (Clerk)
+ * 2. Safety Block Checks
+ * 3. Content Moderation (AI-based)
+ * 4. Multi-mode AI Response Generation (Standard, Exam, Simple, etc.)
+ * 5. Database Persistence for queries and solutions
+ */
 export async function POST(req: Request) {
     try {
         const user = await currentUser();
@@ -131,6 +151,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Message content is required' }, { status: 400 });
         }
 
+        // Global formatting rules for mathematical content using KaTeX compatibility
         const MATH_RULES = `
 ### MATH & SYMBOLS FORMATTING:
 - Use LaTeX syntax for ALL mathematical expressions, symbols (greek letters like \\omega, \\theta), and variables (x, y).
@@ -143,6 +164,9 @@ export async function POST(req: Request) {
         let systemPrompt: string;
         const isFollowUp = history.length > 0;
 
+        /**
+         * Dynamic Prompt Selection based on 'type' and 'history'
+         */
         if (isFollowUp) {
             systemPrompt = `You are an expert AI Tutor helping a student with a doubt. 
 This is a FOLLOW-UP conversation. The student is asking about the previous solution.

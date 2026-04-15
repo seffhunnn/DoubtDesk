@@ -4,12 +4,25 @@ const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
 });
 
+/**
+ * Moderation result object representing the safety status of content.
+ */
 export interface ModerationResult {
     isAllowed: boolean;
     reason: string;
     violationType?: 'abusive' | 'off-topic' | 'spam' | 'other';
 }
 
+/**
+ * Uses a Large Language Model to moderate content for academic appropriateness.
+ * Checks for:
+ * - Academic relevance (study-related, career, tech)
+ * - Abusive language, hate speech, or harassment
+ * - Spam or inappropriate non-academic topics
+ * 
+ * @param content The text to analyze
+ * @returns A ModerationResult indicating if the content is safe and why
+ */
 export async function moderateContent(content: string): Promise<ModerationResult> {
     if (!content || content.trim().length === 0) {
         return { isAllowed: true, reason: "Empty content" };
