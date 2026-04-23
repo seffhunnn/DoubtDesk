@@ -1,6 +1,6 @@
 
 import { drizzle } from 'drizzle-orm/neon-http';
-import { chatHistoryTable } from './configs/schema';
+import { chatHistoryTable } from '../configs/schema';
 import { eq, desc, sql } from 'drizzle-orm';
 import * as dotenv from 'dotenv';
 dotenv.config();
