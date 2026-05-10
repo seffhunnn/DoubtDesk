@@ -68,7 +68,7 @@ export default function Home() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to sign out?</AlertDialogTitle>
             <AlertDialogDescription className="text-slate-400">
-              You will need to log in again to access your career insights and roadmaps.
+              You will need to log in again to access your classroom insights and doubt-solving history.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -89,18 +89,18 @@ export default function Home() {
           <div className="max-w-7xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-500/10 text-blue-400 rounded-full text-sm font-medium mb-6 border border-blue-500/20 animate-fade-in backdrop-blur-md">
               <Sparkles className="w-4 h-4" />
-              AI-Powered Career Intelligence
+              AI-Powered Classroom Collaboration
             </div>
 
             <h2 className="text-6xl md:text-8xl font-black text-white tracking-tight leading-[1.1] mb-6">
-              Navigate Your Career with <br />
+              Empower Your Learning with <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600">
-                Precision AI.
+                Collaborative AI.
               </span>
             </h2>
 
             <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-              DoubtDesk is your personal AI career wingman. From resume analysis to custom learning roadmaps, we provide the tools you need to level up your professional life.
+              DoubtDesk is your AI-powered classroom companion. Get instant doubt solving, detailed teacher analytics, and participate in community boards for a smarter learning experience.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16">
@@ -115,7 +115,7 @@ export default function Home() {
               <SignedOut>
                 <SignUpButton mode="modal" forceRedirectUrl="/rooms">
                   <button className="group px-10 py-5 bg-white text-slate-950 rounded-2xl text-lg font-bold hover:bg-slate-200 transition-all w-50 flex items-center justify-center gap-2">
-                    Get Started Free
+                    Open Classroom
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </SignUpButton>
