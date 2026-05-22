@@ -1,5 +1,5 @@
 import { db } from "@/configs/db";
-import { repliesTable, doubtsTable, classroomsTable, replyLikesTable, usersTable } from "@/configs/schema";
+import { repliesTable, doubtsTable, classroomsTable, replyLikesTable, usersTable, notificationsTable } from "@/configs/schema";
 import { eq, asc, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -117,6 +117,18 @@ export async function POST(req: Request) {
             content: content || null,
             imageUrl: imageUrl || null,
         }).returning();
+
+        // Create in-app notification for the doubt author
+        if (doubt && doubt.userEmail && doubt.userEmail !== email) {
+            await db.insert(notificationsTable).values({
+                userEmail: doubt.userEmail,
+                title: "New Reply on Your Doubt",
+                message: `${userName} replied to your doubt in ${doubt.subject}.`,
+                link: `/dashboard/doubts`,
+                type: "reply",
+                isRead: false
+            }).catch(err => console.error("Failed to insert notification:", err));
+        }
 
         // Trigger background email notification via Inngest
         try {
