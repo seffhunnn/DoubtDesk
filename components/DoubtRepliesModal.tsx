@@ -942,7 +942,9 @@ export default function DoubtRepliesModal({ doubt, isOpen, onClose, onReplyChang
                 onClose={(open) => {
                     if (!open) setReplyToDelete(null);
                 }}
-                onConfirm={() => replyToDelete && handleDeleteReply(replyToDelete)}
+                onConfirm={() => {
+                    if (replyToDelete) handleDeleteReply(replyToDelete);
+                }}
                 isDeleting={isDeletingReply}
                 title="Delete Reply?"
                 description="This action cannot be undone. The reply will be permanently removed."
