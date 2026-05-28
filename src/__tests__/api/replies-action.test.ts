@@ -80,6 +80,7 @@ describe('Replies Action API Endpoint', () => {
         });
 
         selectResultQueue.push(
+            [], // user block check select
             [{ id: 2, doubtId: 2, userEmail: 'owner@example.com' }],
             [{ id: 2, classroomId: null }]
         );
@@ -103,6 +104,7 @@ describe('Replies Action API Endpoint', () => {
         });
 
         selectResultQueue.push(
+            [], // user block check select
             [{ id: 2, doubtId: 2, userEmail: 'owner@example.com' }],
             [{ id: 2, classroomId: null }]
         );
